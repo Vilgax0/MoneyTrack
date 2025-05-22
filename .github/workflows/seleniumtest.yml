@@ -1,13 +1,29 @@
-name: Selenium Login Tests
+name: Selenium Tests with Live Server
 
 on: [push]
 
 jobs:
-  test-login:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Instalar dependencias del frontend
+        working-directory: ./src  # Carpeta de tu proyecto React/Vite
+        run: npm install
+
+      - name: Iniciar servidor de desarrollo en segundo plano
+        working-directory: ./src
+        run: npm run dev &  # El '&' permite ejecutar en segundo plano
+
+      - name: Esperar que el servidor esté listo
+        run: sleep 15  # Espera 15 segundos para que el servidor inicie
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -19,20 +35,21 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y chromium-browser chromium-chromedriver
 
-      - name: Instalar dependencias
+      - name: Instalar dependencias de Python
+        working-directory: ./testsSelenium
         run: |
           python -m pip install --upgrade pip
-          pip install -r testsSelenium/requirements.txt
+          pip install -r requirements.txt
 
-      - name: Ejecutar test de Login
+      - name: Ejecutar pruebas
         working-directory: ./testsSelenium
         run: |
           python -m pytest e2e/tests/testlogin.py \
             --html=e2e/reports/html_reports/login-report.html \
             --self-contained-html \
-            -v  # Modo verbose para más detalles
+            -v
 
-      - name: Subir reporte del login
+      - name: Subir reporte
         uses: actions/upload-artifact@v4
         if: always()
         with:
