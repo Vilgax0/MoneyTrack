@@ -25,10 +25,19 @@ export function register(username, email, password, question, answer) {
     return { success: true, message: "Registro exitoso. ¡Ahora inicia sesión!" };
 }
 
-// Función para iniciar sesión
+// Función para iniciar sesión (con usuario de prueba en desarrollo)
 export function login(username, password) {
-    let users = JSON.parse(localStorage.getItem("users")) || [];
+    // Usuario de prueba solo en desarrollo
+    if (process.env.NODE_ENV === 'development') {
+        if (username.trim() === 'admin' && password === 'password123') {
+            localStorage.setItem("user", "admin");
+            localStorage.setItem("loggedIn", "true");
+            return { success: true, message: "Inicio de sesión exitoso" };
+        }
+    }
 
+    // Lógica original para otros usuarios
+    let users = JSON.parse(localStorage.getItem("users")) || [];
     let user = users.find(user => user.username === username.trim() && user.password === password);
     
     if (user) {

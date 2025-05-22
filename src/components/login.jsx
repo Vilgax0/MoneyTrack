@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/login.scss';
 import '../styles/modal.scss';
-import { login } from '../utils/auth';
+import { login } from '../utils/auth';  // Esta es la función modificada con el usuario de prueba
 
-// Importamos los íconos correctamente
+// Importamos los íconos
 import logo from '../assets/logo.svg';
 import userIcon from '../assets/user.svg';
 import keyIcon from '../assets/key.svg';
@@ -31,6 +31,7 @@ function Login() {
       </div>
 
       <div className="form-container">
+        {/* Input de usuario */}
         <div className="input-group">
           <div className="input-line">
             <img src={userIcon} alt="User Icon" className="input-icon" />
@@ -39,10 +40,12 @@ function Login() {
               placeholder="Usuario"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              data-testid="username-input"
             />
           </div>
         </div>
 
+        {/* Input de contraseña */}
         <div className="input-group">
           <div className="input-line">
             <img src={keyIcon} alt="Key Icon" className="input-icon" />
@@ -51,27 +54,47 @@ function Login() {
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              data-testid="password-input"
             />
           </div>
-          <span className="forgot-password" onClick={() => navigate('/ForgotPassword')}>
+          <span
+            className="forgot-password"
+            onClick={() => navigate('/ForgotPassword')}
+            data-testid="forgot-password-link"
+          >
             Restablecer tu contraseña
           </span>
         </div>
 
+        {/* Mensaje de error */}
         {error && (
-          <div className="modal">
+          <div className="modal" data-testid="error-modal">
             <div className="modal-content">
-              <p>{error}</p>
-              <button onClick={() => setError('')}>Cerrar</button>
+              <p data-testid="error-message">{error}</p>
+              <button
+                onClick={() => setError('')}
+                data-testid="close-error-button"
+              >
+                Cerrar
+              </button>
             </div>
           </div>
         )}
 
+        {/* Botones */}
         <div className="button-group">
-          <button className="btn btn-primary" onClick={handleLogin}>
+          <button
+            className="btn btn-primary"
+            onClick={handleLogin}
+            data-testid="login-button"
+          >
             Iniciar Sesión
           </button>
-          <button className="btn btn-secondary" onClick={() => navigate('/register')}>
+          <button
+            className="btn btn-secondary"
+            onClick={() => navigate('/register')}
+            data-testid="register-button"
+          >
             Registrarse
           </button>
         </div>
