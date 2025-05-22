@@ -1,9 +1,9 @@
-name: Selenium Tests
+name: Selenium Login Tests
 
 on: [push]
 
 jobs:
-  test:
+  test-login:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
@@ -23,18 +23,18 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r testsSelenium/requirements.txt
-          pip install webdriver-manager pytest-html
 
-      - name: Ejecutar pruebas
-        working-directory: ./testsSelenium  # Cambia el contexto de ejecución
+      - name: Ejecutar test de Login
+        working-directory: ./testsSelenium
         run: |
-          python -m pytest e2e/tests/ \
-            --html=e2e/reports/html_reports/test-report.html \
-            --self-contained-html
+          python -m pytest e2e/tests/testlogin.py \
+            --html=e2e/reports/html_reports/login-report.html \
+            --self-contained-html \
+            -v  # Modo verbose para más detalles
 
-      - name: Subir reporte
+      - name: Subir reporte del login
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: selenium-report
-          path: testsSelenium/e2e/reports/html_reports/test-report.html
+          name: login-report
+          path: testsSelenium/e2e/reports/html_reports/login-report.html
