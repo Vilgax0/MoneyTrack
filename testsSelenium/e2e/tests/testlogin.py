@@ -5,11 +5,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.os_manager import ChromeType
+import tempfile
 import pytest
 
 @pytest.fixture
 def browser():
-    # Configuración corregida ✅
+    # Configuración corregida
     service = Service(
         ChromeDriverManager(
             chrome_type=ChromeType.CHROMIUM,
